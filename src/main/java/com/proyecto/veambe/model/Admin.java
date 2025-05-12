@@ -1,10 +1,13 @@
 package com.proyecto.veambe.model;
 
+import java.util.List;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -12,19 +15,21 @@ import jakarta.persistence.Table;
 @Table
 public class Admin {
   @Id
-  @SequenceGenerator(name = "article_id_sequence", sequenceName = "article_id_sequence", allocationSize = 1, initialValue = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_sequence")
-  @SequenceGenerator(name = "article_id_sequence", sequenceName = "article_id_sequence", allocationSize = 1, initialValue = 1)
-  int id;
+  @SequenceGenerator(name = "admin_id_sequence", sequenceName = "admin_id_sequence", allocationSize = 1, initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "admin_id_sequence")
+  private int id;
+
+  @Column(nullable = false)
+  private String name;
+
+  @Column(nullable = false, unique = true)
+  private String email;
 
   @Column
-  String name;
+  private String password;
 
-  @Column
-  String email;
-
-  @Column
-  String password;
+  @OneToMany(mappedBy = "admin")
+  private List<Artwork> artworks;
 
   public Admin() {
   }
@@ -59,6 +64,14 @@ public class Admin {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public List<Artwork> getArtworks() {
+    return this.artworks;
+  }
+
+  public void setArtworks(List<Artwork> artworks) {
+    this.artworks = artworks;
   }
 
 }

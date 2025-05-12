@@ -1,10 +1,16 @@
 package com.proyecto.veambe.model;
 
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 
@@ -12,21 +18,26 @@ import jakarta.persistence.Table;
 @Table(name = "artworks")
 public class Artwork {
   @Id
-  @SequenceGenerator(name = "article_id_sequence", sequenceName = "article_id_sequence", allocationSize = 1, initialValue = 1)
-  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "article_id_sequence")
-  int id;
+  @SequenceGenerator(name = "artwork_id_sequence", sequenceName = "artwork_id_sequence", allocationSize = 1, initialValue = 1)
+  @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "artwork_id_sequence")
+  private int id;
 
   @Column
-  String title;
+  private String title;
 
-  @Column
-  String description;
+  @Column(columnDefinition = "TEXT")
+  private String description;
 
-  @Column
-  String category;
+  @ManyToOne
+  @JoinColumn(name = "admin_id", nullable = false)
+  private Admin admin;
 
-  @Column 
-  String image;
+  @ManyToOne
+  @JoinColumn(name = "category_id", nullable = false)
+  private Category category;
+
+  @OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true)
+  private List<Image> images;
 
   public Artwork() {
   }
@@ -55,20 +66,28 @@ public class Artwork {
     this.description = description;
   }
 
-  public String getCategory() {
+  public Admin getAdmin() {
+    return this.admin;
+  }
+
+  public void setAdmin(Admin admin) {
+    this.admin = admin;
+  }
+
+  public Category getCategory() {
     return this.category;
   }
 
-  public void setCategory(String category) {
+  public void setCategory(Category category) {
     this.category = category;
   }
 
-  public String getImage() {
-    return this.image;
+  public List<Image> getImages() {
+    return this.images;
   }
 
-  public void setImage(String image) {
-    this.image = image;
+  public void setImages(List<Image> images) {
+    this.images = images;
   }
 
 }
