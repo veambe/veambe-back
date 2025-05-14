@@ -19,7 +19,7 @@ public class Image {
   private int id;
 
   @Column(nullable = false)
-  private String url;
+  private String filePath;
 
   @ManyToOne
   @JoinColumn(name = "artwork_id", nullable = false)
@@ -36,12 +36,12 @@ public class Image {
     this.id = id;
   }
 
-  public String getUrl() {
-    return this.url;
+  public String getFilePath() {
+    return this.filePath;
   }
 
-  public void setUrl(String url) {
-    this.url = url;
+  public void setFilePath(String filePath) {
+    this.filePath = filePath;
   }
 
   public Artwork getArtwork() {
