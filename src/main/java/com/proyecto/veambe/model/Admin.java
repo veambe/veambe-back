@@ -2,6 +2,9 @@ package com.proyecto.veambe.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,7 +31,8 @@ public class Admin {
   @Column
   private String password;
 
-  @OneToMany(mappedBy = "admin")
+  @OneToMany(mappedBy = "admin", cascade = CascadeType.ALL)
+  @JsonIgnoreProperties("admin") //evitar el loop. ignora admin en el artwork
   private List<Artwork> artworks;
 
   public Admin() {

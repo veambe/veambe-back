@@ -2,6 +2,8 @@ package com.proyecto.veambe.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,6 +25,7 @@ public class Category {
   String name;
 
   @OneToMany(mappedBy = "category")
+  @JsonIgnoreProperties("category")
   private List<Artwork> artworks;
 
   public Category() {
