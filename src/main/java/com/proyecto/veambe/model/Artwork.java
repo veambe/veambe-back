@@ -33,7 +33,6 @@ public class Artwork {
 
   @ManyToOne
   @JoinColumn(name = "admin_id", nullable = false)
-  @JsonIgnore
   private Admin admin;
 
   @ManyToOne
@@ -42,6 +41,7 @@ public class Artwork {
   private Category category;
 
   @OneToMany(mappedBy = "artwork", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonIgnore
   private List<Image> images;
 
   public Artwork() {
