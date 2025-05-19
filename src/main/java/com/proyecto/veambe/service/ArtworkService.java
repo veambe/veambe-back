@@ -1,5 +1,8 @@
 package com.proyecto.veambe.service;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -29,10 +32,10 @@ public class ArtworkService {
 
   public ResponseEntity<Object> createArtwork(Artwork artwork, Integer adminId, Integer categoryId) {
     Admin admin = adminRepository.findById(adminId)
-        .orElseThrow(() -> new RuntimeException("Admin not found"));
+        .orElseThrow(() -> new RuntimeException("No se encontró el administrador"));
 
     Category category = categoryRepository.findById(categoryId)
-        .orElseThrow(() -> new RuntimeException("Category not found"));
+        .orElseThrow(() -> new RuntimeException("No se encontró la categoría"));
 
     artwork.setAdmin(admin);
     artwork.setCategory(category);
@@ -41,5 +44,18 @@ public class ArtworkService {
 
     return new ResponseEntity<>(artwork, HttpStatus.CREATED);
   }
+
+  public List<Artwork> getAllArtworks(){
+    return this.artworkRepository.findAll();
+  }
+
+  public List<Artwork> getArtworksByCategory(String categoryName){
+    return artworkRepository.findByCategoryName(categoryName);
+  }
+
+  public Optional<Artwork> getArtworkById(Integer id){
+    return artworkRepository.findById(id);
+  }
+
 
 }

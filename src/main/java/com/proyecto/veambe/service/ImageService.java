@@ -34,17 +34,18 @@ public class ImageService {
     Artwork artwork = artworkRepository.findById(artworkId)
         .orElseThrow(() -> new RuntimeException("No se encontró la obra"));
 
-    String filename = UUID.randomUUID() + "_" + file.getOriginalFilename(); // esto lo guarda en el disco local
+        // esto lo guarda en el disco local
+    String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();  // esto genera un nombre nuevo que lo añade al del archivo para que no se repitan los nombres
     Files.createDirectories(Paths.get(uploadDir));
     Path filePath = Paths.get(uploadDir, filename);
     Files.createDirectories(filePath.getParent());
     Files.copy(file.getInputStream(), filePath);
 
     // aquí guardamos en la base de datos
-    Image image = new Image();
-    image.setFilePath(filePath.toString());
-    image.setArtwork(artwork);
-    return imageRepository.save(image);
+    Image image = new Image(); //creamos una nueva entidad imagen
+    image.setFilePath(filePath.toString()); // asignamos una ruta
+    image.setArtwork(artwork); // juntamos la imagen al artwork
+    return imageRepository.save(image); //guardamos en la bd
   }
 
   public Image addImageToArtwork(Integer artworkId, Image image) {
