@@ -43,7 +43,7 @@ public class ImageService {
 
     // aquí guardamos en la base de datos
     Image image = new Image(); //creamos una nueva entidad imagen
-    image.setFilePath(filePath.toString()); // asignamos una ruta
+    image.setFilePath("uploads/" + filename); // asignamos una ruta 'relativa'
     image.setArtwork(artwork); // juntamos la imagen al artwork
     return imageRepository.save(image); //guardamos en la bd
   }
