@@ -34,6 +34,12 @@ public class ImageController {
     return new ResponseEntity<>(savedImage, HttpStatus.CREATED);
   }
 
+  @GetMapping
+  public ResponseEntity<List<Image>> getAllImages() {
+    List<Image> images = imageService.getAllImages();
+    return ResponseEntity.ok(images);
+  }
+
   @GetMapping("/obra/{artworkId}")
   public ResponseEntity<List<Image>> getImagesByArtwork(@PathVariable Integer artworkId) {
     List<Image> images = imageService.getImagesByArtworkId(artworkId);
