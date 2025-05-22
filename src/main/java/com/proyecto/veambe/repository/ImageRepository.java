@@ -11,3 +11,4 @@ import com.proyecto.veambe.model.Image;
 public interface ImageRepository extends JpaRepository<Image, Integer> {
   List<Image> findByArtworkId(Integer artworkId);
 }
+

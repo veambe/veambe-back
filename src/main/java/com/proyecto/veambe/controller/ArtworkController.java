@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
@@ -50,5 +51,15 @@ public class ArtworkController {
   public Optional<Artwork> getArtworkById(@PathVariable Integer artworkId) {
     return artworkService.getArtworkById(artworkId);
   }
+
+  @DeleteMapping("/obra/{artworkId}")
+public ResponseEntity<String> deleteArtwork(@PathVariable Integer artworkId) {
+    try {
+        artworkService.deleteArtworkById(artworkId);
+        return ResponseEntity.ok("La obra se borró correctamente");
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al borrar la obra: " + e.getMessage());
+    }
+}
 
 }

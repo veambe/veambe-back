@@ -24,6 +24,9 @@ public class Category {
   @Column(nullable = false, unique = true)
   String name;
 
+  @Column
+  private String imageUrl;
+
   @OneToMany(mappedBy = "category")
   @JsonIgnore
   private List<Artwork> artworks;
@@ -45,6 +48,14 @@ public class Category {
 
   public void setName(String name) {
     this.name = name;
+  }
+
+  public String getImageUrl() {
+    return imageUrl;
+  }
+
+  public void setImageUrl(String imageUrl) {
+    this.imageUrl = imageUrl;
   }
 
   public List<Artwork> getArtworks() {
