@@ -77,12 +77,28 @@ public class ArtworkService {
 
             Files.deleteIfExists(fullPath);
         } catch (IOException e) {
-            System.err.println("Failed to delete file: " + img.getFilePath());
+            System.err.println("Error al borrar la obra: " + img.getFilePath());
         }
 
         imageRepository.delete(img);
     }
 
     artworkRepository.deleteById(artworkId);
+}
+
+public Artwork updateArtwork(Integer artworkId, Artwork updatedArtwork) {
+  Artwork existing = artworkRepository.findById(artworkId)
+      .orElseThrow(() -> new RuntimeException("Obra no encontrada"));
+
+  existing.setTitle(updatedArtwork.getTitle());
+  existing.setDescription(updatedArtwork.getDescription());
+
+  if (updatedArtwork.getCategory() != null) {
+    Category category = categoryRepository.findById(updatedArtwork.getCategory().getId())
+        .orElseThrow(() -> new RuntimeException("Categoría no encontrada"));
+    existing.setCategory(category);
+  }
+
+  return artworkRepository.save(existing);
 }
 }

@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping("api/v1/trabajo")
@@ -62,4 +64,16 @@ public ResponseEntity<String> deleteArtwork(@PathVariable Integer artworkId) {
     }
 }
 
+@PutMapping("/obra/{artworkId}")
+public ResponseEntity<Object> updateArtwork(
+    @PathVariable Integer artworkId,
+    @RequestBody Artwork updatedArtwork
+) {
+    try {
+        Artwork result = artworkService.updateArtwork(artworkId, updatedArtwork);
+        return ResponseEntity.ok(result);
+    } catch (Exception e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
+}
 }
