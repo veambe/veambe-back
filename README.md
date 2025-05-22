@@ -22,12 +22,12 @@ This is the **Spring Boot backend** for the **veambe** project, a platform dedic
 
 ## Tech Stack
 
-- **Java 17+**
+- **Java 21**
 - **Spring Boot 3.x**
 - **Spring Data JPA**
 - **Hibernate**
-- **H2 (development) or MySQL/PostgreSQL (production-ready)**
-- **Maven** or **Gradle**
+- **PostgreSQL (production-ready)**
+- **Maven**
 
 ---
 
