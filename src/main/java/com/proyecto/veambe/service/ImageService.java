@@ -38,17 +38,15 @@ public class ImageService {
     Artwork artwork = artworkRepository.findById(artworkId)
         .orElseThrow(() -> new RuntimeException("No se encontró la obra"));
 
-    String filename = UUID.randomUUID() + "_" + file.getOriginalFilename(); 
-                                                                            
-                                                                            
+    String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
     Path filePath = Paths.get(uploadDir, filename);
     Files.createDirectories(filePath.getParent());
     Files.copy(file.getInputStream(), filePath);
 
-    Image image = new Image(); 
-    image.setFilePath("uploads/" + filename); 
-    image.setArtwork(artwork); 
-    return imageRepository.save(image); 
+    Image image = new Image();
+    image.setFilePath("uploads/" + filename);
+    image.setArtwork(artwork);
+    return imageRepository.save(image);
   }
 
   public Image addImageToArtwork(Integer artworkId, Image image) {

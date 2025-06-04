@@ -29,9 +29,16 @@ public class ImageController {
   }
 
   @PostMapping("/{artworkId}")
-  public ResponseEntity<Image> uploadImage(@PathVariable Integer artworkId, @RequestBody Image image) {
-    Image savedImage = imageService.addImageToArtwork(artworkId, image);
-    return new ResponseEntity<>(savedImage, HttpStatus.CREATED);
+  public ResponseEntity<Object> uploadImage(
+      @PathVariable Integer artworkId,
+      @RequestBody Image image) {
+
+    try {
+      Image saved = imageService.addImageToArtwork(artworkId, image);
+      return new ResponseEntity<>(saved, HttpStatus.CREATED);
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+    }
   }
 
   @GetMapping
@@ -46,17 +53,18 @@ public class ImageController {
     return ResponseEntity.ok(images);
   }
 
-    @PostMapping(value = "/upload/{artworkId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<Image> uploadFile(
+  @PostMapping(value = "/upload/{artworkId}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Object> uploadFile(
         @PathVariable Integer artworkId,
         @RequestParam("file") MultipartFile file) {
 
-        try {
+          try {
             Image savedImage = imageService.uploadImageFile(artworkId, file);
             return new ResponseEntity<>(savedImage, HttpStatus.CREATED);
-        } catch (IOException e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+          } catch (IOException e) {
+            return new ResponseEntity<>("Error al subir la imagen", HttpStatus.INTERNAL_SERVER_ERROR);
+          } catch (RuntimeException e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
-
+  }
 }
