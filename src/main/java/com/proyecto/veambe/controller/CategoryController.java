@@ -2,6 +2,7 @@ package com.proyecto.veambe.controller;
 
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,7 +28,13 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<Object> createCategory(@Valid @RequestBody Category category) {
-        return categoryService.createCategory(category);
+
+        try {
+            Category created = categoryService.createCategory(category);
+            return ResponseEntity.status(HttpStatus.CREATED).body(created);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+        }
     }
 
     @GetMapping
@@ -37,8 +44,12 @@ public class CategoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getCategoryById(@PathVariable Integer id) {
-        return this.categoryService.getCategoryById(id);
+        try {
+            Category category = categoryService.getCategoryById(id);
+            return ResponseEntity.ok(category);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
     }
-    
 
 }
