@@ -7,8 +7,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 
 import com.proyecto.veambe.model.Admin;
@@ -39,7 +38,7 @@ public class ArtworkService {
     this.imageRepository = imageRepository;
   }
 
-  public ResponseEntity<Object> createArtwork(Artwork artwork, Integer adminId, Integer categoryId) {
+  public Artwork createArtwork(Artwork artwork, Integer adminId, Integer categoryId) {
     Admin admin = adminRepository.findById(adminId)
         .orElseThrow(() -> new RuntimeException("No se encontró el administrador"));
 
@@ -51,7 +50,7 @@ public class ArtworkService {
 
     artworkRepository.save(artwork);
 
-    return new ResponseEntity<>(artwork, HttpStatus.CREATED);
+    return artworkRepository.save(artwork);
   }
 
   public List<Artwork> getAllArtworks(){

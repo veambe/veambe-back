@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
 @RestController
 @RequestMapping("api/v1/trabajo")
 public class ArtworkController {
@@ -32,11 +31,18 @@ public class ArtworkController {
 
   @PostMapping("/{adminId}")
   public ResponseEntity<Object> createArtwork(@PathVariable Integer adminId, @RequestBody Artwork artwork) {
-     if (artwork.getCategory() == null || artwork.getCategory().getId() == 0) {
-        return new ResponseEntity<>("La categoría es obligatoria", HttpStatus.BAD_REQUEST);
+
+    if (artwork.getCategory() == null || artwork.getCategory().getId() == 0) {
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La categoría es obligatoria");
     }
-    Integer categoryId = artwork.getCategory().getId();
-    return artworkService.createArtwork(artwork, adminId, categoryId);
+    try {
+      Integer categoryId = artwork.getCategory().getId();
+      Artwork saved = artworkService.createArtwork(artwork, adminId, categoryId);
+      return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+    } catch (RuntimeException e) {
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+    }
+
   }
 
   @GetMapping()
@@ -55,25 +61,24 @@ public class ArtworkController {
   }
 
   @DeleteMapping("/obra/{artworkId}")
-public ResponseEntity<String> deleteArtwork(@PathVariable Integer artworkId) {
+  public ResponseEntity<String> deleteArtwork(@PathVariable Integer artworkId) {
     try {
-        artworkService.deleteArtworkById(artworkId);
-        return ResponseEntity.ok("La obra se borró correctamente");
+      artworkService.deleteArtworkById(artworkId);
+      return ResponseEntity.ok("La obra se borró correctamente");
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al borrar la obra: " + e.getMessage());
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al borrar la obra: " + e.getMessage());
     }
-}
+  }
 
-@PutMapping("/obra/{artworkId}")
-public ResponseEntity<Object> updateArtwork(
-    @PathVariable Integer artworkId,
-    @RequestBody Artwork updatedArtwork
-) {
+  @PutMapping("/obra/{artworkId}")
+  public ResponseEntity<Object> updateArtwork(
+      @PathVariable Integer artworkId,
+      @RequestBody Artwork updatedArtwork) {
     try {
-        Artwork result = artworkService.updateArtwork(artworkId, updatedArtwork);
-        return ResponseEntity.ok(result);
+      Artwork result = artworkService.updateArtwork(artworkId, updatedArtwork);
+      return ResponseEntity.ok(result);
     } catch (Exception e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+      return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
-}
+  }
 }
